@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "subpackages": [
+    {
+      "root": "package_face_detect",
+      "pages": [
+        "pages/photo/photo",
+        "pages/camera/camera"
+      ]
+    },
+    {
+      "root": "package_measure",
+      "pages": [
+        "pages/camera/camera"
+      ]
+    },
+    {
+      "root": "package_world_track",
+      "pages": [
+        "pages/camera/camera"
+      ]
+    }
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Miniprogram AI",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

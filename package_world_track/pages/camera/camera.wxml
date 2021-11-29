@@ -1,0 +1,15 @@
+<cover-view 
+bindtap="backBtn_callback"   
+style="position:absolute;margin-left: 10px;margin-top: {{menuButtonTop}}px; margin-bottom:5px;height:{{menuButtonHeight}}px;line-height:{{menuButtonHeight}}px;color:white;">返回</cover-view>
+
+<canvas
+        id="canvas1"
+        class="canvas1"
+        type="webgl"
+        disable-scroll = "true"
+        bindtouchend="bindtouchend_callback">
+        <cover-view class="cover-view">
+            <cover-view bindtap="scanQRCode">Scan 3D Model QRCode</cover-view>  
+        </cover-view>         
+</canvas>
+

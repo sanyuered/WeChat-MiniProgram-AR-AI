@@ -1,0 +1,51 @@
+<view class="page">
+    <view class="page__bd">
+        <!-- face detect -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">AI: Face Detect</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a Face Detect demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_face_detect/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="primary">Take a Photo</button>
+                        </navigator>
+                        <navigator url="/package_face_detect/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Access to a Camera</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <!-- measure -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">AR: Measure</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a Measure demo.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_measure/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Access to a Camera</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+         <!-- subway map -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">AR: World Track</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a World Track demo.</view>
+                    <view class="weui-media-box__info">
+                           <navigator url="/package_world_track/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Access to a Camera</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
