@@ -21,7 +21,7 @@ https://developers.weixin.qq.com/miniprogram/dev/api/ai/face/wx.faceDetect.html
 
 ## AI人脸检测
 
-108个特征点的位置。本项目使用了索引值78（左眼）和79（右眼）两个特征点。
+106个特征点的位置。本项目使用了索引值78（左眼）和79（右眼）两个特征点。
 
 ![avatar](screenshot/1-1.jpg)
 
