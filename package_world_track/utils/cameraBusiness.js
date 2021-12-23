@@ -23,6 +23,8 @@ var session;
 var reticle, clock;
 // 保存3D模型的动画
 var mixers = [];
+// 模型默认缩放的大小
+const mainModelScale = 0.05
 
 // 创建AR的坐标系
 function initWorldTrack(model) {
@@ -33,7 +35,6 @@ function initWorldTrack(model) {
             console.log('initWorld ok')
 
             if (model) {
-                // 手动更新3D模型的姿态
                 model.matrixAutoUpdate = false
                 // 将hitTest返回的transform，变换到3D模型的姿态。
                 model.matrix.fromArray(hitTestRes[0].transform)
@@ -62,6 +63,7 @@ function loadModel(modelUrl, callback) {
         function (gltf) {
             console.log('loadModel', 'success');
             var model = gltf.scene;
+            model.scale.set(mainModelScale,mainModelScale,mainModelScale)
             var animations = gltf.animations;
             // save the model
             mainModel = model;
@@ -96,7 +98,6 @@ function updateModel(modelUrl) {
             var model = gltf.scene;
             // 复制已有模型的变换
             addModelByReticle(model, mainModel, true)
-
             // remove old model
             scene.remove(mainModel);
             // save new model
@@ -159,7 +160,7 @@ function updateReticle() {
         reticle.matrixAutoUpdate = false
         reticle.matrix.fromArray(hitTestRes[0].transform)
         // 将矩阵分解到平移position、旋转quaternion、缩放scale。
-        reticle.matrix.decompose(reticle.position, reticle.quaternion, reticle.scale)
+        reticle.matrix.decompose(reticle.position, reticle.quaternion, scale_vector)
         reticle.visible = true
     } else {
         reticle.visible = false
@@ -239,10 +240,12 @@ function calcCanvasSize() {
     const pixelRatio = info.pixelRatio
     const width = info.windowWidth
     const height = info.windowHeight
-
+    /* 官方示例的代码
     canvas.width = width * pixelRatio / 2
     canvas.height = height * pixelRatio / 2
-
+    */
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(width, height);
 }
 
 // 启动AR会话
@@ -300,18 +303,16 @@ function initEnvironment(canvasDom) {
 // copyModel：被复制的3D模型对象 
 // isAddModel:是否将3D模型加入到threejs场景
 function addModelByReticle(model, copyModel, isAddModel) {
-    console.log('addModelByReticle')
     model.matrixAutoUpdate = true
     model.position.copy(copyModel.position)
     model.rotation.copy(copyModel.rotation)
-    
+    console.log('addModelByReticle')
     if (isAddModel) {
         scene.add(model)
     }
 }
 
 // 在手指点击的位置放置3D模型
-// model:3D模型对象 
 // resetPanel：是否用现实环境中新的平面作为AR的空间坐标系 
 // evt：触摸事件 
 // isAddModel:是否将3D模型加入到threejs场景

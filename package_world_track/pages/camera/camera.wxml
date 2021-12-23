@@ -1,6 +1,8 @@
 <cover-view 
 bindtap="backBtn_callback"   
-style="position:absolute;margin-left: 10px;margin-top: {{menuButtonTop}}px; margin-bottom:5px;height:{{menuButtonHeight}}px;line-height:{{menuButtonHeight}}px;color:white;">返回</cover-view>
+style="position:absolute;margin-left: 10px;margin-top: {{menuButtonTop}}px; margin-bottom:0px;height:{{menuButtonHeight}}px;line-height:{{menuButtonHeight}}px;color:white;">
+<cover-image style="width:{{menuButtonHeight}}px;height:{{menuButtonHeight}}px;" src="/assets/back.png"></cover-image>
+</cover-view>
 
 <canvas
         id="canvas1"
