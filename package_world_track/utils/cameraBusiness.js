@@ -23,8 +23,10 @@ var session;
 var reticle, clock;
 // 保存3D模型的动画
 var mixers = [];
-// 模型默认缩放的大小
-const mainModelScale = 0.05
+// 设备像素比例
+var devicePixelRatio;
+// 模型的默认缩放大小
+const modelScale = 0.1;
 
 // 创建AR的坐标系
 function initWorldTrack(model) {
@@ -35,11 +37,11 @@ function initWorldTrack(model) {
             console.log('initWorld ok')
 
             if (model) {
-                model.matrixAutoUpdate = false
+                model.matrixAutoUpdate = true
                 // 将hitTest返回的transform，变换到3D模型的姿态。
                 model.matrix.fromArray(hitTestRes[0].transform)
-                // 将矩阵分解到平移position、旋转quaternion、缩放scale。
-                model.matrix.decompose(model.position, model.quaternion, model.scale)
+                // 将矩阵分解到平移position、旋转quaternion，但不修改缩放scale。
+                model.matrix.decompose(model.position, model.quaternion, new THREE.Vector3())
                 // 添加模型到场景
                 scene.add(model)
             }
@@ -62,15 +64,14 @@ function loadModel(modelUrl, callback) {
     loader.load(modelUrl,
         function (gltf) {
             console.log('loadModel', 'success');
-            var model = gltf.scene;
-            model.scale.set(mainModelScale,mainModelScale,mainModelScale)
-            var animations = gltf.animations;
-            // save the model
-            mainModel = model;
             wx.hideLoading();
+            var model = gltf.scene;
+            model.scale.set(modelScale, modelScale, modelScale)
+            mainModel = model;
+            var animations = gltf.animations;
 
             if (callback) {
-                callback(model, animations)
+                callback(model, animations);
             }
         },
         null,
@@ -237,14 +238,16 @@ function calcCanvasSize() {
     console.log('calcCanvasSize')
 
     const info = wx.getSystemInfoSync()
-    const pixelRatio = info.pixelRatio
+    if (!devicePixelRatio) {
+        devicePixelRatio = info.pixelRatio
+    }
     const width = info.windowWidth
     const height = info.windowHeight
     /* 官方示例的代码
     canvas.width = width * pixelRatio / 2
     canvas.height = height * pixelRatio / 2
     */
-    renderer.setPixelRatio(pixelRatio);
+    renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(width, height);
 }
 
@@ -321,15 +324,15 @@ function addModelByHitTest(evt, resetPanel, isAddModel) {
     const touches = evt.changedTouches.length ? evt.changedTouches : evt.touches
     if (touches.length === 1) {
         const touch = touches[0]
-        const hitTestRes = session.hitTest(touch.x / canvas.width,
-            touch.y / canvas.height,
+        const hitTestRes = session.hitTest(touch.x * devicePixelRatio / canvas.width,
+            touch.y * devicePixelRatio / canvas.height,
             resetPanel)
 
         if (hitTestRes && hitTestRes.length) {
-            mainModel.matrixAutoUpdate = false
+            mainModel.matrixAutoUpdate = true
             mainModel.matrix.fromArray(hitTestRes[0].transform)
-            // 将矩阵分解到平移position、旋转quaternion、缩放scale。
-            mainModel.matrix.decompose(mainModel.position, mainModel.quaternion, mainModel.scale)
+            // 将矩阵分解到平移position、旋转quaternion，但不修改缩放scale。
+            mainModel.matrix.decompose(mainModel.position, mainModel.quaternion, new THREE.Vector3())
             console.log('addModelByHitTest',mainModel.position)
 
             if (isAddModel) {
@@ -376,6 +379,14 @@ function dispose() {
         session = null
     }
 
+    if (reticle) {
+        reticle = null
+    }
+
+    if (devicePixelRatio) {
+        devicePixelRatio = null
+    }
+    
     webglBusiness.dispose()
 }
 

@@ -6,12 +6,14 @@ const robotUrl = 'https://m.sanyue.red/demo/gltf/robot.glb';
 
 Page({
   data: {
+    menuButtonHeight:32,
   },
   onReady() {
     console.log('onReady')
 
     // 获取小程序右上角胶囊按钮的坐标，用作自定义导航栏。
     const menuButton = wx.getMenuButtonBoundingClientRect()
+
     this.setData({
       // 胶囊按钮与手机屏幕顶端的间距
       menuButtonTop: menuButton.top,
