@@ -18,7 +18,7 @@
             </view>
         </view>
 
-        <!-- measure -->
+        <!-- Measure -->
         <view class="weui-panel">
             <view class="weui-panel__hd">AR: Measure</view>
             <view class="weui-panel__bd">
@@ -33,7 +33,7 @@
             </view>
         </view>
 
-         <!-- subway map -->
+         <!-- World Track -->
         <view class="weui-panel">
             <view class="weui-panel__hd">AR: World Track</view>
             <view class="weui-panel__bd">
