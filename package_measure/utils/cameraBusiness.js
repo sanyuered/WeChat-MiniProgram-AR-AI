@@ -253,10 +253,12 @@ function calcCanvasSize() {
     const pixelRatio = info.pixelRatio
     const width = info.windowWidth
     const height = info.windowHeight
-
+    /* 官方示例的代码
     canvas.width = width * pixelRatio / 2
     canvas.height = height * pixelRatio / 2
-
+    */
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(width, height);
 }
 
 // 启动AR会话
