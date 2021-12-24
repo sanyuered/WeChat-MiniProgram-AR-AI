@@ -69,7 +69,7 @@ function initGL(_renderer) {
 // 将YUV格式图像转换为RGB格式图像
 function renderGL(frame) {
   const gl = renderer.getContext()
-  gl.disable(gl.DEPTH_TEST)
+  // gl.disable(gl.DEPTH_TEST)
   // 从AR帧图像中获取YUV格式图像
   const { yTexture, uvTexture } = frame.getCameraTexture(gl, 'yuv')
   // 获取YUV格式纹理图像的调整矩阵

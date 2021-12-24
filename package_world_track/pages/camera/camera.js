@@ -6,7 +6,8 @@ const robotUrl = 'https://m.sanyue.red/demo/gltf/robot.glb';
 
 Page({
   data: {
-    menuButtonHeight:32,
+    menuButtonTop:32,
+    menuButtonHeight:33,
   },
   onReady() {
     console.log('onReady')

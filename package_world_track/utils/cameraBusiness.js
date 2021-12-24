@@ -222,7 +222,7 @@ function initTHREE() {
     // 渲染层
     renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: true
+        alpha: true,
     })
 
     // gamma色彩空间校正，以适应人眼对亮度的感觉。
@@ -238,14 +238,20 @@ function calcCanvasSize() {
     console.log('calcCanvasSize')
 
     const info = wx.getSystemInfoSync()
-    if (!devicePixelRatio) {
-        devicePixelRatio = info.pixelRatio
+    if (!devicePixelRatio) {   
+        // Android
+        if(info.system.indexOf('Android')!==-1){
+            devicePixelRatio = info.pixelRatio+0.025
+        }else{
+            // iOS
+            devicePixelRatio = info.pixelRatio
+        }
     }
     const width = info.windowWidth
     const height = info.windowHeight
     /* 官方示例的代码
-    canvas.width = width * pixelRatio / 2
-    canvas.height = height * pixelRatio / 2
+    canvas.width = width * devicePixelRatio / 2
+    canvas.height = height * devicePixelRatio / 2
     */
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(width, height);
@@ -333,7 +339,7 @@ function addModelByHitTest(evt, resetPanel, isAddModel) {
             mainModel.matrix.fromArray(hitTestRes[0].transform)
             // 将矩阵分解到平移position、旋转quaternion，但不修改缩放scale。
             mainModel.matrix.decompose(mainModel.position, mainModel.quaternion, new THREE.Vector3())
-            console.log('addModelByHitTest',mainModel.position)
+            console.log('addModelByHitTest', mainModel.position)
 
             if (isAddModel) {
                 scene.add(mainModel)
@@ -386,7 +392,7 @@ function dispose() {
     if (devicePixelRatio) {
         devicePixelRatio = null
     }
-    
+
     webglBusiness.dispose()
 }
 
