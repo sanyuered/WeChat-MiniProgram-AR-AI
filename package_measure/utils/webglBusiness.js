@@ -14,7 +14,7 @@ function initGL(_renderer) {
         varying vec2 v_texCoord;
         void main() {
           vec3 p = displayTransform * vec3(a_position, 0);
-          gl_Position = vec4(p, 1);
+          gl_Position = vec4(p.x, p.y, -1, 1);
           v_texCoord = a_texCoord;
         }
       `

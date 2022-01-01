@@ -1,6 +1,6 @@
 <!--顶部导航条-->
 <cover-view 
- style="position:absolute;background-color:white;width:100%;height:{{menuButtonTop+menuButtonHeight+8}}px;">
+ style="position:absolute;width:100%;height:{{menuButtonTop+menuButtonHeight+8}}px;">
  </cover-view>
  <!--后退按钮-->
 <cover-view 

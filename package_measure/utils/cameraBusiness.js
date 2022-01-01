@@ -376,34 +376,6 @@ function addModelByReticle(model, copyModel, isAddModel) {
     }
 }
 
-// 在手指点击的位置放置3D模型
-// resetPanel：是否用现实环境中新的平面作为AR的空间坐标系 
-// evt：触摸事件 
-// isAddModel:是否将3D模型加入到threejs场景
-function addModelByHitTest(evt, resetPanel, isAddModel) {
-    // 点击可移动3D模型位置
-    const touches = evt.changedTouches.length ? evt.changedTouches : evt.touches
-    if (touches.length === 1) {
-        const touch = touches[0]
-        const hitTestRes = session.hitTest(touch.x / canvas.width,
-            touch.y / canvas.height,
-            resetPanel)
-
-        if (hitTestRes && hitTestRes.length) {
-            mainModel.matrixAutoUpdate = false
-            mainModel.matrix.fromArray(hitTestRes[0].transform)
-            // 将矩阵分解到平移position、旋转quaternion、缩放scale。
-            mainModel.matrix.decompose(mainModel.position, mainModel.quaternion, mainModel.scale)
-            console.log('addModelByHitTest', mainModel.position)
-
-            if (isAddModel) {
-                scene.add(mainModel)
-            }
-        }
-    }
-}
-
-
 // 将对象回收
 function dispose() {
     if (renderer) {
@@ -464,7 +436,6 @@ module.exports = {
     createAnimation,
     updateAnimation,
     addModelByReticle,
-    addModelByHitTest,
     setReticle,
     setRuler,
     dispose,
