@@ -239,16 +239,6 @@ function calcCanvasSize() {
 
     const info = wx.getSystemInfoSync()
     devicePixelRatio = info.pixelRatio
-    /*
-    if (!devicePixelRatio) {   
-        // Android
-        if(info.system.indexOf('Android')!==-1){
-            devicePixelRatio = info.pixelRatio+0.025
-        }else{
-            // iOS
-            devicePixelRatio = info.pixelRatio
-        }
-    }*/
     const width = info.windowWidth
     const height = info.windowHeight
     /* 官方示例的代码

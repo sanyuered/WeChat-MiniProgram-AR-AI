@@ -1,8 +1,4 @@
-<!--顶部导航条-->
-<cover-view 
- style="position:absolute;width:100%;height:{{menuButtonTop+menuButtonHeight+8}}px;">
- </cover-view>
- <!--后退按钮-->
+<!--后退按钮-->
 <cover-view 
     bindtap="backBtn_callback"   
     style="position:absolute;margin-left:10px;margin-top:{{menuButtonTop}}px;">

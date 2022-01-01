@@ -31,6 +31,8 @@ var painter;
 var isStartPaint = false;
 // 最近点击光标的位置
 var lastPoint;
+// 设备像素比例
+var devicePixelRatio;
 
 // 创建AR的坐标系
 function initWorldTrack(model) {
@@ -250,14 +252,14 @@ function calcCanvasSize() {
     console.log('calcCanvasSize')
 
     const info = wx.getSystemInfoSync()
-    const pixelRatio = info.pixelRatio
+    devicePixelRatio = info.pixelRatio
     const width = info.windowWidth
     const height = info.windowHeight
     /* 官方示例的代码
-    canvas.width = width * pixelRatio / 2
-    canvas.height = height * pixelRatio / 2
+    canvas.width = width * devicePixelRatio / 2
+    canvas.height = height * devicePixelRatio / 2
     */
-    renderer.setPixelRatio(pixelRatio);
+    renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(width, height);
 }
 
