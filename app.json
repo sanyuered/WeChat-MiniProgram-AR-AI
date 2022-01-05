@@ -21,12 +21,24 @@
       "pages": [
         "pages/camera/camera"
       ]
+    },
+    {
+      "root": "package_spatial_audio",
+      "pages": [
+        "pages/camera/camera"
+      ]
+    },
+    {
+      "root": "package_image_classify",
+      "pages": [
+        "pages/camera/camera"
+      ]
     }
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Miniprogram AI",
+    "navigationBarTitleText": "微信小程序AR",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"

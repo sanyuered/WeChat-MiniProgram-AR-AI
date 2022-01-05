@@ -95,6 +95,7 @@ function renderGL(frame) {
 
     const dt = gl.getUniformLocation(program, 'displayTransform')
     gl.uniformMatrix3fv(dt, false, displayTransform)
+
     gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1)
 
     gl.activeTexture(gl.TEXTURE0 + 5)
@@ -104,19 +105,18 @@ function renderGL(frame) {
     gl.bindTexture(gl.TEXTURE_2D, uvTexture)
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+
     gl.useProgram(currentProgram)
     gl.activeTexture(currentTexture)
-    
   }
-
 }
 
 // 将对象回收
-function dispose() {
+function dispose(){
   if (program && program.gl) {
     program.gl.deleteProgram(program)
     program = null
-  }
+}
 }
 
 module.exports = {

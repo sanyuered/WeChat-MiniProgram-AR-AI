@@ -1,17 +1,14 @@
 <view class="page">
     <view class="page__bd">
-        <!-- face detect -->
+        <!-- Plane Track -->
         <view class="weui-panel">
-            <view class="weui-panel__hd">AI: Face Detect</view>
+            <view class="weui-panel__hd">AR+内容</view>
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
-                    <view class="weui-media-box__desc">This is a Face Detect demo.</view>
+                    <view class="weui-media-box__desc">用AR平面跟踪显示玩具机器人。</view>
                     <view class="weui-media-box__info">
-                        <navigator url="/package_face_detect/pages/photo/photo" class="marginTop10">
-                            <button class="weui-btn" type="primary">Take a Photo</button>
-                        </navigator>
-                        <navigator url="/package_face_detect/pages/camera/camera" class="marginTop10">
-                            <button class="weui-btn" type="primary">Access to a Camera</button>
+                           <navigator url="/package_world_track/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">试一试</button>
                         </navigator>
                     </view>
                 </view>
@@ -20,32 +17,66 @@
 
         <!-- Measure -->
         <view class="weui-panel">
-            <view class="weui-panel__hd">AR: Measure</view>
+            <view class="weui-panel__hd">AR+效率</view>
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
-                    <view class="weui-media-box__desc">This is a Measure demo.</view>
+                    <view class="weui-media-box__desc">用AR测量平面上物体的长度。</view>
                     <view class="weui-media-box__info">
                         <navigator url="/package_measure/pages/camera/camera" class="marginTop10">
-                            <button class="weui-btn" type="primary">Access to a Camera</button>
+                            <button class="weui-btn" type="primary">试一试</button>
                         </navigator>
                     </view>
                 </view>
             </view>
         </view>
 
-         <!-- World Track -->
+        <!-- Spatial Audio-->
         <view class="weui-panel">
-            <view class="weui-panel__hd">AR: World Track</view>
+            <view class="weui-panel__hd">AR+游戏</view>
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
-                    <view class="weui-media-box__desc">This is a World Track demo.</view>
+                    <view class="weui-media-box__desc">用AR跟随用户位置变化的空间化音频。</view>
                     <view class="weui-media-box__info">
-                           <navigator url="/package_world_track/pages/camera/camera" class="marginTop10">
-                            <button class="weui-btn" type="primary">Access to a Camera</button>
+                           <navigator url="/package_spatial_audio/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">试一试</button>
                         </navigator>
                     </view>
                 </view>
             </view>
         </view>
+
+        <!-- Image Classify -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">AR+AI</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">用AI检测图像中的物体，将名称显示在物体上。</view>
+                    <view class="weui-media-box__info">
+                           <navigator url="/package_image_classify/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">试一试</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <!-- Face Detect -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">AI人脸检测</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">根据AI检测的人脸姿态，将虚拟眼镜佩戴在人脸上。</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_face_detect/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">试一试</button>
+                        </navigator>
+                          <navigator url="/package_face_detect/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="default">拍照</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+
     </view>
 </view>

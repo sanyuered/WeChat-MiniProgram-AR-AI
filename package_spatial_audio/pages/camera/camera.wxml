@@ -15,8 +15,9 @@
         type="webgl"
         disable-scroll = "true"
         bindtouchend="bindtouchend_callback">
+        <!--
         <cover-view class="cover-view">
-            <cover-view bindtap="btnRecord_click">{{recorderText}}</cover-view>
-        </cover-view>         
+        </cover-view>    
+        -->     
 </canvas>
 

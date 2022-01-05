@@ -3,11 +3,22 @@ const cameraBusiness = require('../../utils/cameraBusiness.js')
 const canvasId = 'canvas1';
 // 机器人模型，带动画。
 const robotUrl = 'https://m.sanyue.red/demo/gltf/robot.glb';
+// webgl画面录制器的帧数
+const recorderFPS = 30
+// webgl画面录制器的最长录制时间（单位：秒）
+const recorderMaxTime = 5
+// 画布组件
+var canvas1;
+// webgl画面录制器
+var recorder;
+// 是否在录制webgl画面
+var isRecording = false
 
 Page({
   data: {
-    menuButtonTop:32,
-    menuButtonHeight:33,
+    menuButtonTop: 32,
+    menuButtonHeight: 33,
+    recorderText: 'Start Recorder',
   },
   onReady() {
     console.log('onReady')
@@ -27,9 +38,10 @@ Page({
       .select('#' + canvasId)
       .node()
       .exec(res => {
-        const canvas = res[0].node
+        // 画布组件
+        canvas1 = res[0].node
         // 启动AR会话
-        cameraBusiness.initEnvironment(canvas)
+        cameraBusiness.initEnvironment(canvas1)
         // 加载3D模型
         cameraBusiness.loadModel(robotUrl, function (model, animations) {
           // 创建AR的坐标系
@@ -37,30 +49,83 @@ Page({
           // 加载3D模型的动画
           cameraBusiness.createAnimation(model, animations, 'Dance')
         })
+        // webgl画面录制器
+        recorder = wx.createMediaRecorder(canvas1, {
+          fps: recorderFPS,
+        })
 
       })
+
+
   },
   onUnload() {
     console.log('onUnload')
     // 将对象回收
     cameraBusiness.dispose()
+    if (recorder) {
+      recorder.destroy()
+      recorder = null
+    }
+    isRecording = false
   },
   bindtouchend_callback(event) {
     console.log('bindtouchend_callback')
     // 在手指点击的位置放置3D模型 
     cameraBusiness.addModelByHitTest(event, false, false)
   },
-  scanQRCode() {
-    // 扫描3D模型地址的二维码，地址形如xxx.gltf或xxx.glb。
-    wx.scanCode({
-      success(res) {
-        console.log('scanCode', res);
-        // 二维码包含的地址
-        var modelUrl = res.result;
-        // 更新3D模型地址
-        cameraBusiness.updateModel(modelUrl);
+  async startRecord() {
+    this.setData({
+      recorderText: 'Stop Recorder'
+    })
+
+    // 开始录制
+    await recorder.start()
+    // 录制 5s 的视频
+    let frames = recorderFPS * recorderMaxTime
+    // 逐帧绘制
+    while (frames--) {
+      // 中途停止录制
+      if (!isRecording) {
+        break
       }
-    });
+      await recorder.requestFrame()
+    }
+    if (isRecording) {
+      // 到达最长录制时间后，停止录制。
+      await this.stopRecord();
+    }
+  },
+  async stopRecord() {
+    this.setData({
+      recorderText: 'Start Recorder'
+    })
+
+    // 停止录制，生成视频的地址
+    const { tempFilePath } = await recorder.stop()
+    // 保存视频到手机相册
+    wx.saveVideoToPhotosAlbum({
+      filePath: tempFilePath,
+      success(res) {
+        console.log('wx.saveVideoToPhotosAlbum', res.errMsg)
+        if (res.errMsg === 'saveVideoToPhotosAlbum:ok') {
+          var message = '视频已保存到相册';
+          wx.showToast({
+            title: message,
+            icon: 'none'
+          });
+        }
+      }
+    })
+  },
+  // 画面录制按钮
+  async btnRecord_click() {
+    if (isRecording) {
+      isRecording = false
+      await this.stopRecord()
+    } else {
+      isRecording = true
+      await this.startRecord()
+    }
   },
   // 后退按钮的点击事件
   backBtn_callback() {

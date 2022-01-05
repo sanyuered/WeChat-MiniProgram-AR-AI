@@ -1,0 +1,147 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =============================================================================
+ */
+
+// import * as webgl_backend from '@tensorflow/tfjs-backend-webgl';
+// import * as tfjs from '@tensorflow/tfjs-core';
+import { atob, btoa } from 'abab';
+import { TextDecoder, TextEncoder } from 'text-encoder';
+
+/*
+export const SystemConfig = {
+
+  fetchFunc,
+
+  // tslint:disable-next-line:no-any
+  tf,
+
+  // tslint:disable-next-line:no-any
+  webgl,
+
+  // tslint:disable-next-line:no-any
+  canvas,
+
+  // tslint:disable-next-line:no-any
+  backendName,
+}
+*/
+export let systemFetchFunc = Function;
+
+// Implement the WeChat Platform for TFJS
+export class PlatformWeChat {
+  constructor(fetchFunc) {
+    systemFetchFunc = fetchFunc;
+  }
+  fetch(path, requestInits) {
+    return systemFetchFunc(path, requestInits);
+  }
+  now() {
+    return Date.now();
+  }
+  encode(text, encoding) {
+    if (encoding !== 'utf-8' && encoding !== 'utf8') {
+      throw new Error(
+        `Browser's encoder only supports utf-8, but got ${encoding}`);
+    }
+    return new TextEncoder(encoding).encode(text);
+  }
+  decode(bytes, encoding) {
+    return new TextDecoder(encoding).decode(bytes);
+  }
+}
+
+export const WECHAT_WEBGL_BACKEND_NAME = 'wechat-webgl';
+
+
+export function setupWechatPlatform(config, debug = false) {
+  const tf = config.tf;
+  const backendName = config.backendName || WECHAT_WEBGL_BACKEND_NAME;
+  if (debug) {
+    console.log(tf);
+  }
+  // Skip initialization if the backend has been set.
+  if (tf.getBackend() === backendName) {
+    return;
+  }
+  const webgl = config.webgl;
+  tf.ENV.setPlatform('wechat', new PlatformWeChat(config.fetchFunc));
+  setBase64Methods(tf);
+  if (config.webgl && config.canvas) {
+    initWebGL(tf, webgl, config.canvas, backendName, debug);
+  } else {
+    console.log(
+      'webgl backend is not initialized, ' +
+      'please inject webgl backend and the offscreen canvas.');
+  }
+}
+
+/**
+ * Polyfill btoa and atob method on the global scope which will be used by
+ * model parser.
+ */
+export function setBase64Methods(tf) {
+  tf.ENV.global.btoa = btoa;
+  tf.ENV.global.atob = atob;
+}
+/**
+ * Initialize webgl backend using the WebGLRenderingContext from the webgl
+ * canvas node.
+ * @param canvas: webgl canvas node container return from node selector.
+ * @param platform: platform name where the mini app is running (ios, android,
+ *     devtool).
+ * @param debug: enable/disable debug logging.
+ */
+const BACKEND_PRIORITY = 2;
+export function initWebGL(
+  // tslint:disable-next-line:no-any
+  tf, webgl, canvas,
+  backendName = WECHAT_WEBGL_BACKEND_NAME, debug = false) {
+  if (tf.findBackend(backendName) == null) {
+    const WEBGL_ATTRIBUTES = {
+      alpha: false,
+      antialias: false,
+      premultipliedAlpha: false,
+      preserveDrawingBuffer: false,
+      depth: false,
+      stencil: false,
+      failIfMajorPerformanceCaveat: true
+    };
+    const gl = canvas.getContext('webgl', WEBGL_ATTRIBUTES);
+    if (debug) {
+      console.log('start backend registration');
+    }
+    webgl.setWebGLContext(1, gl);
+    try {
+      tf.registerBackend(backendName, () => {
+        const context = new webgl.GPGPUContext(gl);
+        return new webgl.MathBackendWebGL(context);
+      }, BACKEND_PRIORITY);
+
+      // Register all the webgl kernels on the rn-webgl backend
+      const kernels = tf.getKernelsForBackend('webgl');
+      kernels.forEach(kernelConfig => {
+        const newKernelConfig = Object.assign({}, kernelConfig, { backendName });
+        tf.registerKernel(newKernelConfig);
+      });
+    } catch (e) {
+      throw (new Error(`Failed to register Webgl backend: ${e.message}`));
+    }
+  }
+  tf.setBackend(backendName);
+  if (debug) {
+    console.log('current backend = ', tf.getBackend());
+  }
+}
